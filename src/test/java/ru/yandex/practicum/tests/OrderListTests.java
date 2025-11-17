@@ -1,5 +1,6 @@
 package ru.yandex.practicum.tests;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ public class OrderListTests extends BaseTest{
 
     @Test
     @DisplayName("Проверка на получение списка заказов")
+    @Description("Тест на то, что в тело ответа возвращается список заказов для /api/v1/orders эндпоинт")
     public void shouldReturnOrdersList(){
 
         orderSteps

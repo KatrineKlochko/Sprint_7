@@ -1,5 +1,6 @@
 package ru.yandex.practicum.tests;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
@@ -23,13 +24,14 @@ public class CourierLoginTests extends BaseTest {
         courier
                 .setLogin(RandomStringUtils.randomAlphabetic(12))
                 .setPassword(RandomStringUtils.randomAlphabetic(12));
+        couriersSteps
+                .createCourier(courier);
     }
 
     @Test
     @DisplayName("Проверка на логин курьера")
+    @Description("Тест на успешный логин для /api/v1/courier/login эндпоинт")
     public void shouldLoginCourierTest() {
-        couriersSteps
-                .createCourier(courier);
         couriersSteps
                 .login(courier)
                 .statusCode(200)
@@ -38,9 +40,8 @@ public class CourierLoginTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на авторизацию без логина")
+    @Description("Тест на невозможность залогиниться без логина для /api/v1/courier/login эндпоинт")
     public void shouldNotLoginCourierWithoutLoginTest() {
-        couriersSteps
-                .createCourier(courier);
         Courier badCourier = new Courier(courier);
         badCourier.setLogin("");
         couriersSteps
@@ -51,9 +52,8 @@ public class CourierLoginTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на авторизацию без пароля")
+    @Description("Тест на невозможность залогиниться без пароля для /api/v1/courier/login эндпоинт")
     public void shouldNotLoginCourierWithoutPasswordTest() {
-        couriersSteps
-                .createCourier(courier);
         Courier badCourier = new Courier(courier);
         badCourier.setPassword("");
         couriersSteps
@@ -63,10 +63,22 @@ public class CourierLoginTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Проверка на авторизацию с несуществующим пользователем")
-    public void shouldNotLoginCourierWithNonExistentUserTest() {
-        Courier nonExistingCourier = new Courier()
-                .setLogin(RandomStringUtils.randomAlphabetic(12))
+    @DisplayName("Проверка на авторизацию с несуществующим логином")
+    @Description("Тест на невозможность залогиниться с несуществующим логином для /api/v1/courier/login эндпоинт")
+    public void shouldNotLoginCourierWithNonExistentLoginTest() {
+        Courier nonExistingCourier = new Courier(courier)
+                .setLogin(RandomStringUtils.randomAlphabetic(12));
+        couriersSteps
+                .login(nonExistingCourier)
+                .statusCode(404)
+                .body("message", is("Учетная запись не найдена"));
+    }
+
+    @Test
+    @DisplayName("Проверка на авторизацию с несуществующим паролем")
+    @Description("Тест на невозможность залогиниться с несуществующим паролем для /api/v1/courier/login эндпоинт")
+    public void shouldNotLoginCourierWithNonExistentPasswordTest() {
+        Courier nonExistingCourier = new Courier(courier)
                 .setPassword(RandomStringUtils.randomAlphabetic(12));
         couriersSteps
                 .login(nonExistingCourier)

@@ -27,6 +27,7 @@ public class CourierCreateTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на создание курьера")
+    @Description("Тест на успешное создание курьера для /api/v1/courier эндпоинт")
     public void shouldCreateCourierTest() {
         couriersSteps
                 .createCourier(courier)
@@ -36,7 +37,7 @@ public class CourierCreateTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на создание двух одинаковых курьеров")
-    @Description("Тест упал, фактический текст сообщения не соответствует документации")
+    @Description("Тест на невозможность создания двух одинаковых курьеров для /api/v1/courier. Упал, фактический текст сообщения не соответствует документации")
     public void shouldNotCreateSameCourierTest() {
         couriersSteps
                 .createCourier(courier);
@@ -48,6 +49,7 @@ public class CourierCreateTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на создание курьера без логина")
+    @Description("Тест на невозможность создания курьера с незаполненным полем логин для /api/v1/courier эндпоинт")
     public void shouldNotCreateCourierWithoutLoginTest() {
         courier.setLogin("");
         couriersSteps
@@ -58,6 +60,7 @@ public class CourierCreateTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка на создание курьера без пароля")
+    @Description("Тест на невозможность создания курьера с незаполненным полем пароль для /api/v1/courier эндпоинт")
     public void shouldNotCreateCourierWithoutPasswordTest() {
         courier.setPassword("");
         couriersSteps

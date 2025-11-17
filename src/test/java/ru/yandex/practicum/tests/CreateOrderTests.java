@@ -1,6 +1,9 @@
 package ru.yandex.practicum.tests;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +19,7 @@ public class CreateOrderTests extends BaseTest {
     private Order order;
     private OrderSteps orderSteps;
     private final String[] color;
+    private Integer track;
 
     public CreateOrderTests(String[] color) {
         this.color = color;
@@ -50,12 +54,20 @@ public class CreateOrderTests extends BaseTest {
 
     @Test
     @DisplayName("Проверка создания заказа с разными вариантами цвета")
+    @Description("Набор тестов по созданию заказа для /api/v1/orders эндпоинт")
     public void shouldCreateOrderWithDifferentColors() {
-
-        orderSteps
+        ValidatableResponse response = orderSteps
                 .createOrder(order)
                 .statusCode(201)
                 .body("track", notNullValue());
+        track = response.extract().path("track");
+    }
+
+    @After
+    public void tearDown() {
+        if (track != null) {
+            orderSteps.cancelOrder(track);
+        }
     }
 
 }

@@ -10,6 +10,7 @@ public class OrderSteps {
 
     private static final String ORDERS = "/api/v1/orders";
     private static final String ORDER_LIST = "/api/v1/orders";
+    private static final String CANCEL_ORDER = "/api/v1/orders/cancel";
 
     @Step("Метод создания заказа")
     public ValidatableResponse createOrder(Order order) {
@@ -26,6 +27,15 @@ public class OrderSteps {
         return given()
                 .when()
                 .get(ORDER_LIST)
+                .then();
+    }
+
+    @Step("Метод отмены заказа")
+    public ValidatableResponse cancelOrder(int track) {
+        return given()
+                .body("{\"track\": " + track + "}")
+                .when()
+                .put(CANCEL_ORDER)
                 .then();
     }
 
